@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-quest-blue: #3B82F6;
+  --color-quest-purple: #8B5CF6;
+  --color-quest-pink: #EC4899;
+  --color-quest-green: #10B981;
+  --color-quest-orange: #F59E0B;
+  --color-quest-red: #EF4444;
+  --color-quest-yellow: #FBBF24;
+  --color-quest-bg: #FFF7ED;
+  --color-quest-card: #FFFFFF;
+  --color-quest-text: #1F2937;
+  --color-quest-muted: #6B7280;
+  --font-sans: "Nunito", ui-rounded, system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-quest-bg);
+  color: var(--color-quest-text);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
