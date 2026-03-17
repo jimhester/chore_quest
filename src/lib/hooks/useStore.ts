@@ -132,6 +132,16 @@ export function useStore() {
     getAllRedemptions: store.getAllRedemptions,
     getStreakHistory: store.getStreakHistory,
     upsertStreakHistory: store.upsertStreakHistory,
+    recalculateStreak: useCallback((profileId: string) => {
+      const result = store.recalculateStreak(profileId);
+      bump();
+      return result;
+    }, []),
+    useStreakFreeze: useCallback((profileId: string, date: string) => {
+      const result = store.useStreakFreeze(profileId, date);
+      bump();
+      return result;
+    }, []),
     resetAllData,
   };
 }

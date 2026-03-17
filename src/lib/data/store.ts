@@ -265,6 +265,85 @@ export function upsertStreakHistory(
   return entry;
 }
 
+// --- Streak Calculation ---
+
+export function recalculateStreak(profileId: string): { current: number; longest: number } {
+  const data = loadData();
+  const profile = data.profiles.find((p) => p.id === profileId);
+  if (!profile) return { current: 0, longest: 0 };
+
+  const history = data.streakHistory
+    .filter((s) => s.profile_id === profileId && (s.chores_completed > 0 || s.streak_frozen))
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+  if (history.length === 0) {
+    profile.current_streak = 0;
+    saveData(data);
+    return { current: 0, longest: profile.longest_streak };
+  }
+
+  // Check if today or yesterday has activity (streak is still alive)
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: "America/New_York" });
+  const yesterday = new Date(Date.now() - 86400000).toLocaleDateString("en-CA", { timeZone: "America/New_York" });
+  const latestDate = history[0].date;
+
+  if (latestDate !== today && latestDate !== yesterday) {
+    profile.current_streak = 0;
+    saveData(data);
+    return { current: 0, longest: profile.longest_streak };
+  }
+
+  // Count consecutive days backwards
+  let streak = 0;
+  let checkDate = new Date(latestDate + "T12:00:00");
+  for (const entry of history) {
+    const entryDate = entry.date;
+    const expected = checkDate.toLocaleDateString("en-CA", { timeZone: "America/New_York" });
+    if (entryDate === expected) {
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    } else if (entryDate < expected) {
+      break;
+    }
+  }
+
+  profile.current_streak = streak;
+  if (streak > profile.longest_streak) {
+    profile.longest_streak = streak;
+  }
+  saveData(data);
+  return { current: streak, longest: profile.longest_streak };
+}
+
+export function useStreakFreeze(profileId: string, date: string): boolean {
+  const data = loadData();
+  const profile = data.profiles.find((p) => p.id === profileId);
+  if (!profile || profile.streak_freezes <= 0) return false;
+
+  // Check if this date already has a streak entry
+  const existing = data.streakHistory.find(
+    (s) => s.profile_id === profileId && s.date === date
+  );
+  if (existing && existing.chores_completed > 0) return false; // already has activity
+
+  if (existing) {
+    existing.streak_frozen = true;
+  } else {
+    data.streakHistory.push({
+      id: crypto.randomUUID(),
+      profile_id: profileId,
+      date,
+      chores_completed: 0,
+      points_earned: 0,
+      streak_frozen: true,
+    });
+  }
+
+  profile.streak_freezes -= 1;
+  saveData(data);
+  return true;
+}
+
 // --- Utility ---
 
 export function resetAllData(): void {

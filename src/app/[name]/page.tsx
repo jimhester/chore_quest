@@ -3,23 +3,29 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useStore } from "@/lib/hooks/useStore";
-import { getPetStage, getPetEmoji, getPetStageName, getStageProgress } from "@/lib/utils/pet";
+import { getPetStage, getPetEmoji, getPetStageName, getStageProgress, calculatePetMood, getPetMoodEmoji, getPetMoodLabel } from "@/lib/utils/pet";
 import { getToday } from "@/lib/utils/dates";
 
 export default function KidDashboard() {
   const params = useParams<{ name: string }>();
-  const { getProfileByName, getCompletionsForDate } = useStore();
+  const { getProfileByName, getCompletionsForDate, recalculateStreak } = useStore();
   const profile = getProfileByName(params.name);
 
   if (!profile) return null;
 
+  // Recalculate streak on dashboard load
+  recalculateStreak(profile.id);
+  // Re-read profile after recalculation
+  const updatedProfile = getProfileByName(params.name)!;
+
   const today = getToday();
-  const todayCompletions = getCompletionsForDate(profile.id, today);
+  const todayCompletions = getCompletionsForDate(updatedProfile.id, today);
   const todayPoints = todayCompletions.reduce((sum, c) => sum + c.points_earned, 0);
 
-  const hasPet = profile.pet_type !== null;
-  const petStage = getPetStage(profile.lifetime_points);
-  const petProgress = getStageProgress(profile.lifetime_points);
+  const hasPet = updatedProfile.pet_type !== null;
+  const petStage = getPetStage(updatedProfile.lifetime_points);
+  const petProgress = getStageProgress(updatedProfile.lifetime_points);
+  const mood = calculatePetMood(todayCompletions.length, updatedProfile.current_streak, todayCompletions.length > 0 ? 0 : null);
 
   return (
     <div className="space-y-6">
@@ -28,11 +34,14 @@ export default function KidDashboard() {
         {hasPet ? (
           <>
             <div className="text-6xl mb-2">
-              {getPetEmoji(profile.pet_type!, petStage)}
+              {getPetEmoji(updatedProfile.pet_type!, petStage)}
             </div>
-            <p className="font-bold text-lg">{profile.pet_name}</p>
+            <p className="font-bold text-lg">{updatedProfile.pet_name}</p>
             <p className="text-quest-muted text-sm">
-              {getPetStageName(petStage)} • Level {petStage}
+              {getPetStageName(petStage)} · Level {petStage}
+            </p>
+            <p className="text-sm mt-1">
+              {getPetMoodEmoji(mood)} {getPetMoodLabel(mood)}
             </p>
             {petStage < 5 && (
               <div className="mt-3">
@@ -76,12 +85,25 @@ export default function KidDashboard() {
           </div>
           <div>
             <p className="text-2xl font-bold text-quest-red">
-              {profile.current_streak > 0 ? `🔥 ${profile.current_streak}` : "—"}
+              {updatedProfile.current_streak > 0 ? `🔥 ${updatedProfile.current_streak}` : "—"}
             </p>
             <p className="text-xs text-quest-muted">Day Streak</p>
           </div>
         </div>
       </div>
+
+      {/* Streak freeze info */}
+      {updatedProfile.streak_freezes > 0 && (
+        <div className="bg-blue-50 rounded-2xl p-4 flex items-center gap-3">
+          <span className="text-2xl">❄️</span>
+          <div>
+            <p className="font-semibold text-sm">
+              {updatedProfile.streak_freezes} Streak Freeze{updatedProfile.streak_freezes !== 1 ? "s" : ""}
+            </p>
+            <p className="text-xs text-quest-muted">Protects your streak if you miss a day</p>
+          </div>
+        </div>
+      )}
 
       {/* Quick actions */}
       <div className="grid grid-cols-2 gap-4">

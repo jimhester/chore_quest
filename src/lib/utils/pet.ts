@@ -47,3 +47,27 @@ export function getPetMoodEmoji(mood: PetMood): string {
     case "sleepy": return "😴";
   }
 }
+
+export function getPetMoodLabel(mood: PetMood): string {
+  switch (mood) {
+    case "happy": return "Happy!";
+    case "content": return "Content";
+    case "sleepy": return "Sleepy...";
+  }
+}
+
+/**
+ * Determine pet mood from recent activity.
+ * - happy: did chores today and has active streak
+ * - content: did chores recently (within 1 day)
+ * - sleepy: no chores in 2+ days
+ */
+export function calculatePetMood(
+  todayChoreCount: number,
+  currentStreak: number,
+  lastActivityDaysAgo: number | null,
+): PetMood {
+  if (todayChoreCount > 0 && currentStreak > 0) return "happy";
+  if (lastActivityDaysAgo !== null && lastActivityDaysAgo <= 1) return "content";
+  return "sleepy";
+}
