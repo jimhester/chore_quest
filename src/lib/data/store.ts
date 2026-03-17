@@ -103,6 +103,29 @@ export function completeChore(profileId: string, choreId: string, points: number
     profile.lifetime_points += points;
   }
 
+  // Update today's streak history
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: "America/New_York" });
+  const todayCompletions = data.choreCompletions.filter(
+    (c) => c.profile_id === profileId && c.completed_at.startsWith(today)
+  );
+  const todayPoints = todayCompletions.reduce((sum, c) => sum + c.points_earned, 0);
+  const existing = data.streakHistory.find(
+    (s) => s.profile_id === profileId && s.date === today
+  );
+  if (existing) {
+    existing.chores_completed = todayCompletions.length;
+    existing.points_earned = todayPoints;
+  } else {
+    data.streakHistory.push({
+      id: crypto.randomUUID(),
+      profile_id: profileId,
+      date: today,
+      chores_completed: todayCompletions.length,
+      points_earned: todayPoints,
+      streak_frozen: false,
+    });
+  }
+
   saveData(data);
   return completion;
 }

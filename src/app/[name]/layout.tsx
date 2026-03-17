@@ -4,6 +4,8 @@ import { useParams, notFound } from "next/navigation";
 import { useStore } from "@/lib/hooks/useStore";
 import Navigation from "@/components/shared/Navigation";
 import PointsBadge from "@/components/shared/PointsBadge";
+import { PointsOverlay } from "@/components/shared/PointsAnimation";
+import { ConfettiOverlay } from "@/components/shared/Confetti";
 import Link from "next/link";
 
 export default function KidLayout({ children }: { children: React.ReactNode }) {
@@ -17,6 +19,9 @@ export default function KidLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen pb-20">
+      <PointsOverlay />
+      <ConfettiOverlay />
+
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm border-b border-gray-100">
         <div className="max-w-lg mx-auto flex items-center justify-between px-4 py-3">
