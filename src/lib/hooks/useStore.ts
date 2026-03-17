@@ -73,6 +73,15 @@ export function useStore() {
     []
   );
 
+  const deleteCompletion = useCallback(
+    (completionId: string) => {
+      const result = store.deleteCompletion(completionId);
+      bump();
+      return result;
+    },
+    []
+  );
+
   const getRewards = useCallback((profileId?: string) => store.getRewards(profileId), []);
   const getAllRewards = useCallback(() => store.getAllRewards(), []);
 
@@ -114,6 +123,7 @@ export function useStore() {
     getCompletionsForDate,
     getAllCompletions: store.getAllCompletions,
     completeChore,
+    deleteCompletion,
     getRewards,
     getAllRewards,
     createReward,

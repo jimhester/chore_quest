@@ -130,6 +130,42 @@ export function completeChore(profileId: string, choreId: string, points: number
   return completion;
 }
 
+export function deleteCompletion(completionId: string): boolean {
+  const data = loadData();
+  const idx = data.choreCompletions.findIndex((c) => c.id === completionId);
+  if (idx === -1) return false;
+
+  const completion = data.choreCompletions[idx];
+  data.choreCompletions.splice(idx, 1);
+
+  // Reverse profile points
+  const profile = data.profiles.find((p) => p.id === completion.profile_id);
+  if (profile) {
+    profile.current_points = Math.max(0, profile.current_points - completion.points_earned);
+    profile.lifetime_points = Math.max(0, profile.lifetime_points - completion.points_earned);
+  }
+
+  // Recalculate streak history for that day
+  const date = completion.completed_at.substring(0, 10);
+  const remaining = data.choreCompletions.filter(
+    (c) => c.profile_id === completion.profile_id && c.completed_at.startsWith(date)
+  );
+  const streakEntry = data.streakHistory.find(
+    (s) => s.profile_id === completion.profile_id && s.date === date
+  );
+  if (streakEntry) {
+    if (remaining.length === 0) {
+      data.streakHistory = data.streakHistory.filter((s) => s.id !== streakEntry.id);
+    } else {
+      streakEntry.chores_completed = remaining.length;
+      streakEntry.points_earned = remaining.reduce((sum, c) => sum + c.points_earned, 0);
+    }
+  }
+
+  saveData(data);
+  return true;
+}
+
 // --- Rewards ---
 
 export function getRewards(profileId?: string): Reward[] {

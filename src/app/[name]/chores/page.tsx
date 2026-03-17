@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useStore } from "@/lib/hooks/useStore";
@@ -8,26 +8,46 @@ import { getToday } from "@/lib/utils/dates";
 import { triggerPointsFloat } from "@/components/shared/PointsAnimation";
 import { triggerConfetti } from "@/components/shared/Confetti";
 
+interface UndoState {
+  completionId: string;
+  choreName: string;
+  points: number;
+}
+
 export default function ChoresPage() {
   const params = useParams<{ name: string }>();
-  const { getProfileByName, getChores, getCompletionsForDate, completeChore } =
+  const { getProfileByName, getChores, getCompletionsForDate, completeChore, deleteCompletion } =
     useStore();
   const profile = getProfileByName(params.name);
   const [justCompleted, setJustCompleted] = useState<string | null>(null);
+  const [undoState, setUndoState] = useState<UndoState | null>(null);
+  const undoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clean up undo timer on unmount
+  useEffect(() => {
+    return () => {
+      if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
+    };
+  }, []);
 
   const handleComplete = useCallback(
-    (choreId: string, points: number, event: React.MouseEvent) => {
+    (choreId: string, choreName: string, points: number, event: React.MouseEvent) => {
       if (!profile) return;
 
       const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
       const x = rect.right - 40;
       const y = rect.top + rect.height / 2;
 
-      completeChore(profile.id, choreId, points);
+      const completion = completeChore(profile.id, choreId, points);
       triggerPointsFloat(points, x, y);
 
       setJustCompleted(choreId);
       setTimeout(() => setJustCompleted(null), 600);
+
+      // Set up undo toast
+      if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
+      setUndoState({ completionId: completion.id, choreName, points });
+      undoTimerRef.current = setTimeout(() => setUndoState(null), 5000);
 
       // Confetti on every 5th completion
       const today = getToday();
@@ -36,8 +56,15 @@ export default function ChoresPage() {
         triggerConfetti();
       }
     },
-    [profile, completeChore, getCompletionsForDate]
+    [profile, completeChore, deleteCompletion, getCompletionsForDate]
   );
+
+  const handleUndo = useCallback(() => {
+    if (!undoState) return;
+    deleteCompletion(undoState.completionId);
+    if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
+    setUndoState(null);
+  }, [undoState, deleteCompletion]);
 
   if (!profile) return null;
 
@@ -85,7 +112,7 @@ export default function ChoresPage() {
                 layout
                 onClick={(e) => {
                   if (!isDailyDone) {
-                    handleComplete(chore.id, chore.points, e);
+                    handleComplete(chore.id, chore.name, chore.points, e);
                   }
                 }}
                 disabled={isDailyDone}
@@ -143,6 +170,30 @@ export default function ChoresPage() {
           })}
         </AnimatePresence>
       </div>
+
+      {/* Undo toast */}
+      <AnimatePresence>
+        {undoState && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-24 left-4 right-4 max-w-lg mx-auto z-40"
+          >
+            <div className="bg-gray-800 text-white rounded-xl px-4 py-3 flex items-center justify-between shadow-lg">
+              <span className="text-sm">
+                Completed <strong>{undoState.choreName}</strong> (+{undoState.points})
+              </span>
+              <button
+                onClick={handleUndo}
+                className="ml-3 text-quest-orange font-bold text-sm shrink-0"
+              >
+                Undo
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
