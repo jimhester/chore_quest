@@ -45,6 +45,12 @@ Each kid sees a list of available chores they can complete. Chores are **trust-b
 | Helping Dad with a project | 15 | As needed | e.g., putting up trampoline |
 | Bonus: Extra helpful (parent awards) | 5-20 | As needed | |
 
+**Bonus point days:**
+- Each day, 1-2 chores are randomly selected to award **1.5x points** (rounded up to the nearest 5)
+- The bonus chores are revealed when kids open the app — discovery is part of the fun
+- Highlighted visually in the chore list (e.g. a star or "bonus" badge)
+- Both kids get the same bonus chores each day
+
 **Chore management (parent mode):**
 - Add, edit, remove chores
 - Set point values and frequency (daily, per-meal, as-needed)
