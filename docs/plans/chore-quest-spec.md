@@ -66,7 +66,7 @@ Each kid sees a list of available chores they can complete. Chores are **trust-b
 
 ### 3. Virtual Pet (Cat or Dog)
 
-Each kid chooses a **cat or dog** when they first set up their profile.
+Each kid chooses a pet when they first set up their profile. **Elise has chosen a red panda; Charlotte has chosen an arctic fox.**
 
 **Pet progression system:**
 - Pet starts as a baby/kitten/puppy
@@ -144,7 +144,7 @@ A shared view (maybe the landing page) showing:
 | id | uuid | PK |
 | name | text | "Elise", "Charlotte" |
 | role | text | "kid" or "parent" |
-| pet_type | text | "cat" or "dog" |
+| pet_type | text | e.g. "red_panda", "arctic_fox" |
 | pet_name | text | User-chosen |
 | lifetime_points | int | Running total (never decreases) |
 | current_points | int | Spendable balance |
