@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "ChoreQuest",
-  description: "Hester Family Chore Tracker — earn points, grow your pet!",
+  description: "Hester Family Chore Tracker — earn coins, grow your pet!",
 };
 
 export default function RootLayout({

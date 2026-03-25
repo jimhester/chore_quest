@@ -81,7 +81,7 @@ export default function KidDashboard() {
           </div>
           <div>
             <p className="text-2xl font-bold text-quest-orange">{todayPoints}</p>
-            <p className="text-xs text-quest-muted">Points Earned</p>
+            <p className="text-xs text-quest-muted">Coins Earned</p>
           </div>
           <div>
             <p className="text-2xl font-bold text-quest-red">

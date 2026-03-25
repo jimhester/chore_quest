@@ -115,7 +115,7 @@ export default function ManageRewards() {
           </div>
 
           <div>
-            <label className="text-xs text-quest-muted font-semibold">Cost (points)</label>
+            <label className="text-xs text-quest-muted font-semibold">Cost (coins)</label>
             <input
               type="number"
               value={editing.cost}
@@ -154,7 +154,7 @@ export default function ManageRewards() {
           >
             <span className="text-xl">{reward.icon}</span>
             <span className="flex-1 font-medium">{reward.name}</span>
-            <span className="text-quest-green font-bold text-sm">{reward.cost} pts</span>
+            <span className="text-quest-green font-bold text-sm">{reward.cost} coins</span>
             <button
               onClick={() => startEdit(reward)}
               className="text-quest-muted hover:text-quest-purple text-sm px-2"

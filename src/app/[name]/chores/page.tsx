@@ -90,11 +90,11 @@ export default function ChoresPage() {
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">Today&apos;s Chores</h2>
         <div className="text-sm font-semibold text-quest-muted">
-          {todayCompletions.length} done · {todayPoints} pts
+          {todayCompletions.length} done · {todayPoints} coins
         </div>
       </div>
       <p className="text-quest-muted text-sm">
-        Tap a chore to mark it done and earn points!
+        Tap a chore to mark it done and earn coins!
       </p>
 
       <div className="space-y-3">

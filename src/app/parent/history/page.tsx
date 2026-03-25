@@ -88,7 +88,7 @@ export default function HistoryPage() {
     <div className="space-y-6">
       <h2 className="text-xl font-bold">Activity History</h2>
       <p className="text-quest-muted text-sm">
-        Tap the × on any chore completion to remove it and refund points.
+        Tap the × on any chore completion to remove it and refund coins.
       </p>
 
       {Array.from(groupedByDate.entries()).map(([dateKey, items]) => (

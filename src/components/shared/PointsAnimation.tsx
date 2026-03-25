@@ -50,7 +50,7 @@ export function PointsOverlay() {
             transition={{ duration: 1, ease: "easeOut" }}
             className="absolute text-quest-orange font-extrabold text-xl"
           >
-            +{f.points} ⭐
+            +{f.points} 🪙
           </motion.div>
         ))}
       </AnimatePresence>

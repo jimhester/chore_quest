@@ -120,7 +120,7 @@ export default function ManageChores() {
 
           <div className="flex gap-3">
             <div className="flex-1">
-              <label className="text-xs text-quest-muted font-semibold">Points</label>
+              <label className="text-xs text-quest-muted font-semibold">Coins</label>
               <input
                 type="number"
                 value={editing.points}
@@ -179,7 +179,7 @@ export default function ManageChores() {
                 {chore.frequency.replace("_", " ")}
               </span>
             </div>
-            <span className="text-quest-orange font-bold text-sm">{chore.points} pts</span>
+            <span className="text-quest-orange font-bold text-sm">{chore.points} coins</span>
             <button
               onClick={() => startEdit(chore)}
               className="text-quest-muted hover:text-quest-purple text-sm px-2"

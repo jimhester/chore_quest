@@ -18,7 +18,7 @@ export default function ParentOverview() {
                 <p className="text-xl font-bold text-quest-orange">
                   {kid.current_points}
                 </p>
-                <p className="text-xs text-quest-muted">Points</p>
+                <p className="text-xs text-quest-muted">Coins</p>
               </div>
               <div>
                 <p className="text-xl font-bold text-quest-purple">

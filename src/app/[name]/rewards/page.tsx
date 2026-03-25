@@ -34,11 +34,11 @@ export default function RewardsPage() {
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">Rewards Store</h2>
         <div className="text-sm font-semibold text-quest-orange">
-          ⭐ {profile.current_points} pts available
+          🪙 {profile.current_points} coins available
         </div>
       </div>
       <p className="text-quest-muted text-sm">
-        Spend your points on awesome rewards!
+        Spend your coins on awesome rewards!
       </p>
 
       <div className="space-y-3">
@@ -86,7 +86,7 @@ export default function RewardsPage() {
                         canAfford ? "text-quest-green" : "text-quest-muted"
                       }`}
                     >
-                      {reward.cost} pts
+                      {reward.cost} coins
                     </motion.span>
                   )}
                 </AnimatePresence>
@@ -106,7 +106,7 @@ export default function RewardsPage() {
                         onClick={() => handleRedeem(reward.id)}
                         className="flex-1 bg-quest-green text-white font-bold py-2 rounded-lg"
                       >
-                        Spend {reward.cost} pts
+                        Spend {reward.cost} coins
                       </button>
                       <button
                         onClick={() => setConfirmId(null)}

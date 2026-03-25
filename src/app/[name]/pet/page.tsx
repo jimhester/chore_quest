@@ -104,7 +104,7 @@ export default function PetPage() {
         </div>
         <p className="text-sm text-quest-muted mt-2">
           {stage < 5
-            ? `${profile.lifetime_points} / ${nextThreshold} points to next level`
+            ? `${profile.lifetime_points} / ${nextThreshold} coins to next level`
             : "Max level reached! 🏆"}
         </p>
       </div>
@@ -116,7 +116,7 @@ export default function PetPage() {
             <p className="text-2xl font-bold text-quest-orange">
               {profile.lifetime_points}
             </p>
-            <p className="text-xs text-quest-muted">Lifetime Points</p>
+            <p className="text-xs text-quest-muted">Lifetime Coins</p>
           </div>
           <div>
             <p className="text-2xl font-bold text-quest-purple">

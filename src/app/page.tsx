@@ -54,7 +54,7 @@ export default function FamilyDashboard() {
         <h1 className="text-3xl font-extrabold text-quest-purple">
           ChoreQuest
         </h1>
-        <p className="text-quest-muted">Who&apos;s ready to earn some points?</p>
+        <p className="text-quest-muted">Who&apos;s ready to earn some coins?</p>
       </div>
 
       {/* Pets side by side */}
@@ -86,7 +86,7 @@ export default function FamilyDashboard() {
                 {hasPet ? `${getPetStageName(stage)} · Lv.${stage}` : "Tap to start!"}
               </p>
               <div className="flex justify-center gap-3 mt-2 text-xs">
-                <span className="text-quest-orange font-bold">⭐ {kid.current_points}</span>
+                <span className="text-quest-orange font-bold">🪙 {kid.current_points}</span>
                 {kid.current_streak > 0 && (
                   <span className="text-quest-red font-bold">🔥 {kid.current_streak}</span>
                 )}
@@ -121,7 +121,7 @@ export default function FamilyDashboard() {
                   <p className="font-semibold text-sm">{kid.name}</p>
                   {completions.length > 0 ? (
                     <p className="text-xs text-quest-muted">
-                      {completions.length} chore{completions.length !== 1 ? "s" : ""} · {points} pts
+                      {completions.length} chore{completions.length !== 1 ? "s" : ""} · {points} coins
                     </p>
                   ) : (
                     <p className="text-xs text-quest-muted">Nothing yet</p>
@@ -148,7 +148,7 @@ export default function FamilyDashboard() {
                   {idx === 0 && total > 0 ? "🥇" : idx === 1 && total > 0 ? "🥈" : ""}
                 </span>
                 <span className="flex-1 font-semibold">{kid.name}</span>
-                <span className="text-quest-orange font-bold">{total} pts</span>
+                <span className="text-quest-orange font-bold">{total} coins</span>
               </div>
             ))}
         </div>
