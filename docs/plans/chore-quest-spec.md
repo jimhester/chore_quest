@@ -98,6 +98,10 @@ Kids spend earned points on rewards. The reward list is managed by parents.
 | Heartwood dessert | 50 pts |
 | Staycation | 150 pts |
 | Streak freeze token | 60 pts |
+| $10 gift card | TBD pts |
+| Hibachi night | TBD pts |
+| Your choice of dinner | TBD pts |
+| You pick movie for movie night | TBD pts |
 
 **Reward management (parent mode):**
 - Add, edit, remove rewards
